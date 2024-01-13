@@ -15,6 +15,7 @@ class AccessibleRamp(Geometry):
         self.__width: float = 0
         self.__slope: float = 0
         self.__length: float = 0
+        self.__map: list = list()
 
         # Get limits
         if option:
@@ -28,12 +29,21 @@ class AccessibleRamp(Geometry):
         self.load()
 
     def __str__(self):
-        limits = f"Limits(slope={self.limits.slope}, max_landing={self.limits.max_landing}, max_segments={self.limits.max_segments})"
-        return f"Ramp\nHeight={self.height}, Width={self.width}, Slope={self.slope}, {limits}"
+        t0 = f"Height={self.height}, Width={self.width}, Slope={self.slope}"
+        t1 = f"Num Landings={self.num_landings}, Segments={self.segments}"
+        return f"Ramp({t0}, {self.limits}, {t1})"
 
     def load(self):
-        # Calculates everything
-        ...
+
+        # Calculate number of landings
+        self.num_landings = self.calc_num_landing()
+
+        # Calculate number of segments
+        self.segments = self.calc_num_segments()
+
+        # Create Map (init instances)
+
+
         # self.rampSegmentLength = self.calcDistance(self.height, self.slope)
         # self.numLanding = self.calcNumLanding(self.height, self.max_landing)
         # self.mapLength = self.calcMapLength(self.numLanding)
@@ -44,8 +54,9 @@ class AccessibleRamp(Geometry):
     def adapt_to_slope(self, slope: float) -> bool:
         for option in self.limits.get_options():
             if slope <= option[0]:
-                if self.limits.max_landing != option[1] or self.limits.max_segments != option[2]:
+                if (self.limits.max_landing != option[1] or self.limits.max_segments != option[2]):
                     self.limits = Limits.set_by_value(option)
+                self.slope = slope
                 return True
         return False
 
@@ -87,14 +98,11 @@ class AccessibleRamp(Geometry):
                 map[i] = "ramp"
         return map
 
-    def calcMapLength(self, numLanding):
-        if numLanding == 0:
-            return 3
-        else:
-            return 2 + (numLanding + (numLanding * 2))
+    def calc_num_segments(self) -> int:
+        return 1 + (self.num_landings * 2)
 
-    def calcNumLanding(self, height, max_landing):
-        return floor(height / max_landing)
+    def calc_num_landing(self) -> int:
+        return floor(self.height / self.limits.max_landing)
 
     def calcDistance(self, height, slope):
         return height / (slope / 100)
@@ -126,7 +134,7 @@ class AccessibleRamp(Geometry):
     @property
     def length(self) -> float:
         return self.__length
-
-    @length.setter
-    def length(self, n: int | float | str) -> None:
-        self.__length = self.validate_number(n, "Length")
+    
+    @property
+    def map(self) -> list:
+        return self.__map

@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 @dataclass
 class Limits:
@@ -9,16 +9,11 @@ class Limits:
     max_segments: int | None
 
     # Common context
-    common_a: tuple = (5, 1.5, None)
-    common_b: tuple = (6.25, 1, None)
-    common_c: tuple = (8.33, 0.8, 15)  # the normal values to use
-
-    # Exception context
-    except_a: tuple = (10, 0.2, 4)
-    except_b: tuple = (12.5, 0.075, 1)
-
-    def get_slopes(self) -> list:
-        return [self.common_a[0], self.common_b[0], self.common_c[0], self.except_a[0], self.except_b[0]]
+    common_a: tuple = field(default=(5, 1.5, None), repr=False)
+    common_b: tuple = field(default=(6.25, 1, None), repr=False)
+    common_c: tuple = field(default=(8.33, 0.8, 15), repr=False)
+    except_a: tuple = field(default=(10, 0.2, 4), repr=False)
+    except_b: tuple = field(default=(12.5, 0.075, 1), repr=False)
 
     def get_options(self) -> tuple:
         return (self.common_a, self.common_b, self.common_c, self.except_a, self.except_b)
