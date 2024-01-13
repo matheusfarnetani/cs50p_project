@@ -17,12 +17,19 @@ class Limits:
     except_a: tuple = (10, 0.2, 4)
     except_b: tuple = (12.5, 0.075, 1)
 
-    def get_slopes(self) -> tuple:
-        return (self.common_a[0], self.common_b[0], self.common_c[0], self.except_a[0], self.except_b[0])
+    def get_slopes(self) -> list:
+        return [self.common_a[0], self.common_b[0], self.common_c[0], self.except_a[0], self.except_b[0]]
+
+    def get_options(self) -> tuple:
+        return (self.common_a, self.common_b, self.common_c, self.except_a, self.except_b)
 
     @classmethod
-    def set_values(cls, set_values: str):
-        match set_values:
+    def set_by_value(cls, t: tuple):
+        return cls(*t)
+
+    @classmethod
+    def set_by_option(cls, option: str):
+        match option:
             case "COM-A":
                 return cls(*cls.common_a)
             case "COM-B":
@@ -34,5 +41,4 @@ class Limits:
             case "EXP-B":
                 return cls(*cls.except_b)
             case _:
-                raise ValueError(
-                    "Invalid Option. Available options: COM-A, COM-B, COM-C, EXP-A, EXP-B")
+                raise ValueError("Invalid Option. Available options: COM-A, COM-B, COM-C, EXP-A, EXP-B")
