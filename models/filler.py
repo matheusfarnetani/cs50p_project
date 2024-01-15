@@ -17,7 +17,7 @@ class Filler(Geometry):
         self.volume = self.length * self.width * self.height
     
     def __str__(self) -> str:
-        return f"Filler Geometry(area={self.area}, volume={self.volume})"
+        return f"Filler Geometry(length={self.length:.3f}, width={self.width}, height={self.height:.3f}, area={self.area:.3f}, volume={self.volume:.3f})"
         
     @property
     def length(self) -> float:

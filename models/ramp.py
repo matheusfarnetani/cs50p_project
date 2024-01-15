@@ -7,13 +7,15 @@ class Ramp(Geometry):
         # Initialize Variables
         self.__height: float = self.validate_number(height, "Ramp: Height")
         self.__width: float = self.validate_number(width, "Ramp: Width")
+        self.__slope: float = 0
+        self.__length: float = 0
 
         # Calculate slope or length
         if slope and not length:
-            self.__slope: float = slope
+            self.__slope = slope
             self.lack_length()
         elif length and not slope:
-            self.__length: float = length
+            self.__length = length
             self.lack_slope()
         else:
             raise KeyError("Initialize a ramp object with height, width and length or slope")
@@ -26,7 +28,7 @@ class Ramp(Geometry):
         self.volume = (1/2 * (self.length * self.height)) * self.width
 
     def __str__(self) -> str:
-        return f"Ramp(height={self.height}, width={self.width}, length={self.length:.3f}, slope={self.slope}, {super().__str__()},"
+        return f"Ramp(height={self.height:.3f}, width={self.width}, length={self.length:.3f}, slope={self.slope}, {super().__str__()},"
 
     def lack_length(self) -> None:
         """
@@ -36,7 +38,7 @@ class Ramp(Geometry):
         :raises ZeroDivisionError: If self.slope is 0, as it would result in division by zero.
         """
         try:
-            self.__length: float = self.height / (self.slope / 100)
+            self.__length = self.height / (self.slope / 100)
         except ZeroDivisionError:
             raise ZeroDivisionError("Slope cannot be zero for length calculation.")
 
@@ -49,7 +51,7 @@ class Ramp(Geometry):
         :raises ZeroDivisionError: If self.length is 0, as it would result in division by zero.
         """
         try:
-            self.__slope: float = (self.height / self.length) * 100
+            self.__slope = (self.height / self.length) * 100
         except ZeroDivisionError:
             raise ZeroDivisionError("Length cannot be zero for slope calculation.")
 

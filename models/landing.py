@@ -17,7 +17,7 @@ class Landing(Geometry):
         self.volume = self.length * self.width * self.height
 
     def __str__(self) -> str:
-        return f"Landing(length={self.length}, width={self.width}, height={self.height}, {super().__str__()})"
+        return f"Landing(length={self.length}, width={self.width}, height={self.height:.3f}, {super().__str__()})"
 
     @property
     def length(self) -> float:

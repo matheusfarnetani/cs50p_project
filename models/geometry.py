@@ -1,5 +1,5 @@
 class Geometry:
-    def __init__(self, area: float = None, volume: float = None):
+    def __init__(self, area: float = 0, volume: float = 0):
         
         # Initialize variables
         self.__area: float = 0
@@ -32,16 +32,14 @@ class Geometry:
                 raise ValueError(f"{variable}: n must be positive.")
             return num
 
-    @classmethod
-    def add_area(cls, other):
-        area = cls.area + other.area
-        volume = cls.volume + other.volume
+    def add_area(self, other):
+        area = self.area + other.area
+        volume = self.volume + other.volume
         return Geometry(area, volume)
     
-    @classmethod
-    def add_volume(cls, other):
-        area = cls.area
-        volume = cls.volume + other.volume
+    def add_volume(self, other):
+        area = self.area
+        volume = self.volume + other.volume
         return Geometry(area, volume)
 
     @property
