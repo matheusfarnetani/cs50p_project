@@ -1,8 +1,8 @@
 from dataclasses import dataclass, field
 
+
 @dataclass
 class Limits:
-
     # Ramp limits
     slope: float
     max_landing: float
@@ -16,7 +16,13 @@ class Limits:
     except_b: tuple = field(default=(12.5, 0.075, 1), repr=False)
 
     def get_options(self) -> tuple:
-        return (self.common_a, self.common_b, self.common_c, self.except_a, self.except_b)
+        return (
+            self.common_a,
+            self.common_b,
+            self.common_c,
+            self.except_a,
+            self.except_b,
+        )
 
     @classmethod
     def set_by_value(cls, t: tuple):
@@ -36,4 +42,6 @@ class Limits:
             case "EXP-B":
                 return cls(*cls.except_b)
             case _:
-                raise ValueError("Invalid Option. Available options: COM-A, COM-B, COM-C, EXP-A, EXP-B")
+                raise ValueError(
+                    "Invalid Option. Available options: COM-A, COM-B, COM-C, EXP-A, EXP-B"
+                )

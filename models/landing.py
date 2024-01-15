@@ -3,9 +3,10 @@ from .geometry import Geometry
 
 class Landing(Geometry):
     def __init__(self, length: float, width: float, height: float):
-
         # Initialize Variables
-        self.__length: float = self.validate_number(length, "Landing: Length")
+        self.__length: float = (
+            self.validate_number(length, "Landing: Length") if length > 1.1 else 1.1
+        )  # NBR 9077 - 4.6.2.3
         self.__width: float = self.validate_number(width, "Landing: Width")
         self.__height: float = self.validate_number(height, "Landing: Height")
 

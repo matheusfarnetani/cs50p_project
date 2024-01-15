@@ -8,9 +8,7 @@ from .filler import Filler
 
 
 class AccessibleRamp(Geometry):
-
     def __init__(self, height: float, width: float, option: str, slope: float = 0):
-
         # Initialize Variables
         self.__height: float = 0
         self.__width: float = 0
@@ -54,14 +52,16 @@ class AccessibleRamp(Geometry):
     def adapt_to_slope(self, slope: float) -> bool:
         for option in self.limits.get_options():
             if slope <= option[0]:
-                if (self.limits.max_landing != option[1] or self.limits.max_segments != option[2]):
+                if (
+                    self.limits.max_landing != option[1]
+                    or self.limits.max_segments != option[2]
+                ):
                     self.limits = Limits.set_by_value(option)
                 self.slope = slope
                 return True
         return False
 
     def load(self):
-
         # Calculate number of landings
         self.calc_num_landing()
 
@@ -90,7 +90,8 @@ class AccessibleRamp(Geometry):
         self.segments = 1 + (floor(self.num_landings) * 2)
         if self.limits.max_segments and self.segments > self.limits.max_segments:
             raise ValueError(
-                f"A ramp of height={self.height} cannot be created with slope={self.slope}%. Because segments={self.segments} > max_segments={self.limits.max_segments}")
+                f"A ramp of height={self.height} cannot be created with slope={self.slope}%. Because segments={self.segments} > max_segments={self.limits.max_segments}"
+            )
 
     def create_map(self) -> None:
         self.__map = [None for _ in range(self.segments)]
@@ -103,7 +104,10 @@ class AccessibleRamp(Geometry):
             if i % 2 == 0:
                 self.__map[i] = Ramp(heights[i], self.width, slope=self.slope)
                 if i != 0:
-                    self.__map[i] = (self.__map[i], Filler(self.width, self.width, heights[i - 1]))
+                    self.__map[i] = (
+                        self.__map[i],
+                        Filler(self.__map[i].length, self.width, heights[i - 1]),
+                    )
             else:
                 self.__map[i] = Landing(self.width, self.width, heights[i])
 
@@ -126,10 +130,10 @@ class AccessibleRamp(Geometry):
 
     def calculate_heights(self) -> list:
         heights = list()
-        
+
         for i in range(floor(self.segments / 2)):
             heights.append(self.limits.max_landing)
-            heights.append((self.limits.max_landing * (i + 1))) 
+            heights.append((self.limits.max_landing * (i + 1)))
 
         n = self.num_landings - floor(self.num_landings)
         if n != 0:

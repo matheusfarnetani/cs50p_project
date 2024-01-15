@@ -1,6 +1,5 @@
 class Geometry:
     def __init__(self, area: float = 0, volume: float = 0):
-        
         # Initialize variables
         self.__area: float = 0
         self.__volume: float = 0
@@ -26,7 +25,9 @@ class Geometry:
         try:
             num = float(n)
         except ValueError:
-            raise ValueError(f"{variable}: n must be a valid int, float, or a numeric string")
+            raise ValueError(
+                f"{variable}: n must be a valid int, float, or a numeric string"
+            )
         else:
             if num < 0:
                 raise ValueError(f"{variable}: n must be positive.")
@@ -36,7 +37,7 @@ class Geometry:
         area = self.area + other.area
         volume = self.volume + other.volume
         return Geometry(area, volume)
-    
+
     def add_volume(self, other):
         area = self.area
         volume = self.volume + other.volume

@@ -2,8 +2,9 @@ from .geometry import Geometry
 
 
 class Ramp(Geometry):
-    def __init__(self, height: float, width: float, length: float = 0, slope: float = 0):
-
+    def __init__(
+        self, height: float, width: float, length: float = 0, slope: float = 0
+    ):
         # Initialize Variables
         self.__height: float = self.validate_number(height, "Ramp: Height")
         self.__width: float = self.validate_number(width, "Ramp: Width")
@@ -18,14 +19,16 @@ class Ramp(Geometry):
             self.__length = length
             self.lack_slope()
         else:
-            raise KeyError("Initialize a ramp object with height, width and length or slope")
+            raise KeyError(
+                "Initialize a ramp object with height, width and length or slope"
+            )
 
         # Creates Geometry
         super().__init__()
 
         # Calculates area and volume
         self.area = self.length * self.width
-        self.volume = (1/2 * (self.length * self.height)) * self.width
+        self.volume = ((self.length * self.height) / 2) * self.width
 
     def __str__(self) -> str:
         return f"Ramp(height={self.height:.3f}, width={self.width}, length={self.length:.3f}, slope={self.slope}, {super().__str__()},"
