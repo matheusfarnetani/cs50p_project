@@ -1,4 +1,4 @@
-# Classpass
+# Accessible Ramp Calculator
 
 ![GitHub repo size](https://img.shields.io/github/repo-size/matheusfarnetani/cs50p_project)
 ![GitHub language count](https://img.shields.io/github/languages/count/matheusfarnetani/cs50p_project)
@@ -12,4 +12,4 @@
 
 ![Alt text](./images/cs50p-Layout2.png)
 ![Alt text](./images/cs50p-Layout1.png)
-![Alt text](./images/cs50p_project.svg)
+![Alt text](./images/cs50p_project.drawio.svg)
