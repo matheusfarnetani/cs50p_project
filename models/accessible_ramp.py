@@ -8,7 +8,7 @@ from .filler import Filler
 
 
 class AccessibleRamp(Geometry):
-    def __init__(self, height: float, width: float, option: str, slope: float = 0):
+    def __init__(self, height: float, width: float, option: str = "COM-C", slope: float = 0):
         # Initialize Variables
         self.__height: float = 0
         self.__width: float = 0
@@ -28,15 +28,9 @@ class AccessibleRamp(Geometry):
 
     def __str__(self):
         t0 = f"Height={self.height}, Width={self.width}, Slope={self.slope}"
-        t1 = f"Num Landings={self.num_landings}, Segments={self.segments}, Length={self.length:.3f}"
-        t2 = ""
-        for obj in self.map:
-            t2 += "\n"
-            if isinstance(obj, tuple):
-                t2 += str(obj[0]) + "\n" + str(obj[1]) + "\n"
-            else:
-                t2 += str(obj) + "\n"
-        return f"Accessible Ramp({t0}, {self.limits}, {t1}, {super().__str__()})\n\n--Map--{t2}"
+        t1 = f"Num Landings={self.__num_landings}, Segments={self.segments}"
+        t2 = f"Length={self.length:.3f}, Final Height={self.final_heigth:.3f}"
+        return f"Accessible Ramp\n{t0}\n{self.limits}\n{t1}\n{t2}\n{super().__str__()})"
 
     def set_variables(self, height: float, width: float, slope: float) -> bool:
         self.height = height
@@ -74,6 +68,9 @@ class AccessibleRamp(Geometry):
         # Calculate length
         self.calculate_length()
 
+        # Calculate final height
+        self.calculate_final_height()
+
         # Creates Geometry
         super().__init__()
 
@@ -84,22 +81,25 @@ class AccessibleRamp(Geometry):
         self.calculate_volume()
 
     def calc_num_landing(self) -> None:
-        self.num_landings = self.height / self.limits.max_landing
+        self.__num_landings = self.height / self.limits.max_landing
 
     def calc_num_segments(self) -> None:
-        self.segments = 1 + (floor(self.num_landings) * 2)
+        self.segments = 1 + floor(self.__num_landings)
+            
         if self.limits.max_segments and self.segments > self.limits.max_segments:
             raise ValueError(
                 f"A ramp of height={self.height} cannot be created with slope={self.slope}%. Because segments={self.segments} > max_segments={self.limits.max_segments}"
             )
 
     def create_map(self) -> None:
-        self.__map = [None for _ in range(self.segments)]
+        #Calculate length
+        map_length = self.segments + floor(self.num_landings)
+        self.__map = [None for _ in range(map_length)]
 
-        if floor(self.num_landings) == 0:
+        if floor(self.__num_landings) == 0:
             self.__map[0] = Ramp(self.height, self.width, slope=self.slope)
 
-        heights = self.calculate_heights()
+        heights = self.calculate_heights(length=map_length)
         for i in range(len(heights)):
             if i % 2 == 0:
                 self.__map[i] = Ramp(heights[i], self.width, slope=self.slope)
@@ -128,18 +128,32 @@ class AccessibleRamp(Geometry):
                 g = g.add_volume(i)
         self.volume = g.volume
 
-    def calculate_heights(self) -> list:
+    def calculate_heights(self, length: int) -> list:
         heights = list()
 
-        for i in range(floor(self.segments / 2)):
+        # Create height in pairs of ramp and landing
+        for i in range(floor(length / 2)):
             heights.append(self.limits.max_landing)
             heights.append((self.limits.max_landing * (i + 1)))
 
-        n = self.num_landings - floor(self.num_landings)
+        # The for loop above creates only lists of even length
+        # If the lists is, in fact, odd, this next sequence
+        # Will check if the number of landings has decimal values
+        # And then calculate the last height and append it
+        n = self.__num_landings - floor(self.__num_landings)
         if n != 0:
             heights.append((self.limits.max_landing * n))
+        else:
+            heights.append(self.limits.max_landing)
 
         return heights
+    
+    def calculate_final_height(self):
+        if len(self.__map) == 1:
+            self.final_heigth = self.__map[0].height
+        elif type(self.__map[-1]) == tuple:
+            self.final_heigth = self.__map[-1][0].height + self.__map[-1][1].height
+        
 
     @property
     def height(self) -> float:
@@ -172,3 +186,11 @@ class AccessibleRamp(Geometry):
     @property
     def map(self) -> list:
         return self.__map
+
+    @property
+    def map(self) -> list:
+        return self.__map
+
+    @property
+    def num_landings(self) -> list:
+        return self.__num_landings
