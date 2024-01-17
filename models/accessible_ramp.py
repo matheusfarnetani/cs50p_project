@@ -36,6 +36,7 @@ class AccessibleRamp(Geometry):
         self.height = height
         self.width = width
         if slope:
+            self.slope = slope
             if not self.adapt_to_slope(slope):
                 return False
             return True
@@ -51,7 +52,6 @@ class AccessibleRamp(Geometry):
                     or self.limits.max_segments != option[2]
                 ):
                     self.limits = Limits.set_by_value(option)
-                self.slope = slope
                 return True
         return False
 
@@ -92,7 +92,6 @@ class AccessibleRamp(Geometry):
             )
 
     def create_map(self) -> None:
-        #Calculate length
         map_length = self.segments + floor(self.num_landings)
         self.__map = [None for _ in range(map_length)]
 

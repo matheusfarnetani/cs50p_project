@@ -6,17 +6,21 @@ class Ramp(Geometry):
         self, height: float, width: float, length: float = 0, slope: float = 0
     ):
         # Initialize Variables
-        self.__height: float = self.validate_number(height, "Ramp: Height")
-        self.__width: float = self.validate_number(width, "Ramp: Width")
+        self.__height: float = 0
+        self.__width: float = 0
         self.__slope: float = 0
         self.__length: float = 0
 
+        # Set Variables
+        self.height = height
+        self.width = width
+
         # Calculate slope or length
         if slope and not length:
-            self.__slope = slope
+            self.__slope = self.validate_number(slope, "Ramp: Slope")
             self.lack_length()
         elif length and not slope:
-            self.__length = length
+            self.__length = self.validate_number(length, "Ramp: Length")
             self.lack_slope()
         else:
             raise KeyError(
@@ -62,14 +66,30 @@ class Ramp(Geometry):
     def height(self) -> float:
         return self.__height
 
+    @height.setter
+    def height(self, n) -> None:
+        self.__height = self.validate_number(n, "Height")
+
     @property
     def width(self) -> float:
         return self.__width
+
+    @width.setter
+    def width(self, n) -> None:
+        self.__width = self.validate_number(n, "Width")
 
     @property
     def slope(self) -> float:
         return self.__slope
 
+    @slope.setter
+    def slope(self, n) -> None:
+        self.slope = self.validate_number(n, "Slope")
+
     @property
     def length(self) -> float:
         return self.__length
+
+    @length.setter
+    def length(self, n) -> None:
+        self.length = self.validate_number(n, "Length")

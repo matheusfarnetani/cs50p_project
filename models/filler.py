@@ -4,9 +4,13 @@ from .geometry import Geometry
 class Filler(Geometry):
     def __init__(self, length: float, width: float, height: float):
         # Initialize Variables
-        self.__length: float = self.validate_number(length, "Filler: Length:")
-        self.__width: float = self.validate_number(width, "Filler: Width:")
-        self.__height: float = self.validate_number(height, "Filler: Height:")
+        self.__length: float = 0
+        self.__width: float = 0
+        self.__height: float = 0
+
+        self.length = length
+        self.width = width
+        self.height = height
 
         # Creates Geometry
         super().__init__()
@@ -22,10 +26,23 @@ class Filler(Geometry):
     def length(self) -> float:
         return self.__length
 
+    @length.setter
+    def length(self, n) -> None:
+        self.__length = self.validate_number(n, "Length")
+
     @property
     def width(self) -> float:
         return self.__width
 
+    @width.setter
+    def width(self, n) -> None:
+        self.__width = self.validate_number(n, "Width")
+
     @property
     def height(self) -> float:
         return self.__height
+
+    @height.setter
+    def height(self, n) -> None:
+        self.__height = self.validate_number(n, "Height")
+

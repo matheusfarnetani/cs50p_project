@@ -22,6 +22,9 @@ class Geometry:
         :return: The validated and converted float value of n.
         :rtype: float
         """
+        if isinstance(n, bool):
+            raise ValueError(f"{variable}: n must be a valid int, float, or a numeric string")
+
         try:
             num = float(n)
         except ValueError:
