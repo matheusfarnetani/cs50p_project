@@ -9,19 +9,22 @@ MAX_SLOPE_START = 5
 MAX_SLOPE_INCREMENT = 0.2
 
 
-def main():
+def main() -> None:
     args = arguments()
     
-    height = args.height if args.height else get_float("Height: ")
-    width = args.width if args.width else get_float("Width: ")
-    slope = args.slope if args.slope else get_float("Slope: ")
-    option = args.opt if args.opt else input("Option: ").upper()
+    height: float = args.height if args.height else get_float("Height: ")
+    width:float = args.width if args.width else get_float("Width: ")
+    slope: float = args.slope if args.slope else get_float("Slope: ")
+    option: str = args.opt if args.opt else input("Option: ").upper()
 
-    max_height = max_possible_height(width, slope, MAX_HEIGHT_START, MAX_HEIGHT_INCREMENT)
-    print(f"In a total, {len(max_height)} ramps were calculated.",
-          f"\nThe count started from {MAX_HEIGHT_START:.2f}m and was incremented, within each loop, by {MAX_HEIGHT_INCREMENT:.2f}m"
-          f"\nThe last ramp calculated, with a slope of {slope:.2f}%, has a height of {max_height[-1].height:.2f}m"
-    )
+    if slope > 6.25:
+        max_height = max_possible_height(slope, MAX_HEIGHT_START, MAX_HEIGHT_INCREMENT)
+        print(f"In a total, {len(max_height)} ramps were calculated.",
+            f"\nThe count started from {MAX_HEIGHT_START:.2f}m and was incremented, within each loop, by {MAX_HEIGHT_INCREMENT:.2f}m"
+            f"\nThe last ramp calculated, with a slope of {slope:.2f}%, has a height of {max_height[-1].height:.2f}m"
+        )
+    else:
+        print(f"For a slope less than 6.25% there is no max possible height, if you have the space :)")
 
     print("")
 
@@ -35,12 +38,12 @@ def main():
 
     print("\n", ar)
 
-def max_possible_height(width: float, slope: float, start: float, increment: float) -> list:
-    results = list()
-    height = start
+def max_possible_height(slope: float, start: float, increment: float) -> list:
+    results: list = list()
+    height: float = start
     while True:
         try:
-            results.append(AccessibleRamp(height=height, width=width, slope=slope))
+            results.append(AccessibleRamp(height=height, width=1.2, slope=slope))
         except ValueError:
             break
         height += increment
@@ -48,8 +51,8 @@ def max_possible_height(width: float, slope: float, start: float, increment: flo
 
 
 def max_possible_slope(height: float, width: float, start: float, increment: float) -> list:
-    results = list()
-    slope = start
+    results: list = list()
+    slope: float = start
     while True:
         try:
             results.append(AccessibleRamp(height=height, width=width, slope=slope))
