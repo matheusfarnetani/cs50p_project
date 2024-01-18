@@ -70,7 +70,14 @@ class AccessibleRamp(Geometry):
             raise ValueError("Unable to calculate number of segments")
 
         # Create Map (init instances)
-        if m := self.create_map(self.segments,self.num_landings,self.limits.max_landing,self.height,self.width,self.slope):
+        if m := self.create_map(
+            self.segments,
+            self.num_landings,
+            self.limits.max_landing,
+            self.height,
+            self.width,
+            self.slope,
+        ):
             self.__map = m
         else:
             raise ValueError("Unable to create and populate map")
@@ -113,11 +120,19 @@ class AccessibleRamp(Geometry):
             return None
         return s
 
-    def create_map(self, segments: int, num_landings: float, max_landing: float, height: float, width: float, slope: float,) -> list | None:
+    def create_map(
+        self,
+        segments: int,
+        num_landings: float,
+        max_landing: float,
+        height: float,
+        width: float,
+        slope: float,
+    ) -> list | None:
         try:
             if floor(num_landings) == 0:
-                    return [Ramp(height, width, slope=slope)]
-            
+                return [Ramp(height, width, slope=slope)]
+
             map_length: int = segments + floor(num_landings)
         except (TypeError, ValueError):
             return None
@@ -152,7 +167,7 @@ class AccessibleRamp(Geometry):
                 else:
                     l += i.length
         except (AttributeError, TypeError):
-                return None
+            return None
         return l
 
     def calculate_volume(self, map: list) -> float | None:
@@ -201,7 +216,7 @@ class AccessibleRamp(Geometry):
             elif type(map[-1]) == tuple:
                 return map[-1][0].height + map[-1][1].height
             return None
-        except (TypeError):
+        except TypeError:
             return None
 
     @property
